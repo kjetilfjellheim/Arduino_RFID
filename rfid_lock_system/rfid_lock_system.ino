@@ -51,7 +51,7 @@ int keyNum = 0;
 // General state for the applications.
 enum State {
   // Waiting for an rfid card
-  WAIT_FOR_RFID,
+  WAIT_FOR_RFID,æ
   // Preparing to enter keycode
   PREPARE_KEYPAD_ENTER,
   // Entering keys
