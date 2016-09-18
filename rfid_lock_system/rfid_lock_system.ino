@@ -29,9 +29,6 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);
 // MIFARE key
 MFRC522::MIFARE_Key userKey;
 
-// MIFARE key
-MFRC522::MIFARE_Key systemKey;
-
 // Keypad definition
 const byte ROWS = 4; //four rows
 const byte COLS = 3; //four columns
@@ -51,7 +48,7 @@ int keyNum = 0;
 // General state for the applications.
 enum State {
   // Waiting for an rfid card
-  WAIT_FOR_RFID,æ
+  WAIT_FOR_RFID,
   // Preparing to enter keycode
   PREPARE_KEYPAD_ENTER,
   // Entering keys
