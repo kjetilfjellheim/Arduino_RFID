@@ -102,6 +102,7 @@ void loop() {
     if (authenticate()) {
       state = OPEN_DOOR;  
     } else {
+      failureKey();
       state = WAIT_FOR_RFID;
     }    
   } else {
@@ -144,6 +145,14 @@ bool authenticate() {
     result = true;    
   }
   return result;
+}
+
+/**
+ * Keep door locked 3 seconds.
+ */
+void failureKey() {
+  indicateClosedDoor();
+  delay(3000);
 }
 
 /**
