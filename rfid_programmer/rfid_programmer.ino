@@ -131,7 +131,7 @@ void loop() {
       state = WRITE_KEY;
     }
   } else {
-    writeNewCode();
+    writeNewCode();      
     state = WAIT_FOR_RFID;
   }
 }
@@ -141,7 +141,7 @@ void loop() {
 */
 void setDefaultUserKey() {
   for (int i = 0; i < KEYLENGTH; i++) {
-    currentKey[i] = 0xFF;
+    currentKey[i] = 0xff;
   }
 }
 
@@ -188,7 +188,8 @@ bool writeNewCode() {
   Serial.println(F("Reading"));
   byte blockData[18];
   byte blockSize = sizeof(blockData);
-  MFRC522::StatusCode status = mfrc522.MIFARE_Read((byte)USER_KEY_BLOCK, blockData, &blockSize);
+  byte blockAddr = 3;
+  MFRC522::StatusCode status = mfrc522.MIFARE_Read(blockAddr, blockData, &blockSize);
   if (status == MFRC522::STATUS_OK) {
     Serial.println(F("Writing"));    
     blockData[0] = newKey[0];
@@ -197,9 +198,11 @@ bool writeNewCode() {
     blockData[3] = newKey[3];
     blockData[4] = newKey[4];
     blockData[5] = newKey[5];
-    status = mfrc522.MIFARE_Write((byte)USER_KEY_BLOCK, blockData, 16);
+    status = mfrc522.MIFARE_Write(blockAddr, blockData, 16);
     if (status == MFRC522::STATUS_OK) {
       indicateWriteSuccess();
+        mfrc522.PICC_HaltA();
+        mfrc522.PCD_StopCrypto1();
     } else {
       Serial.print(F("Write failed: "));
       Serial.println(mfrc522.GetStatusCodeName(status));
@@ -232,9 +235,7 @@ bool authenticate() {
     Serial.print(F("Authenticate failed: "));
     Serial.println(mfrc522.GetStatusCodeName(status));
   } else {
-    Serial.println(F("Authenticate success"));
-    mfrc522.PICC_HaltA();
-    mfrc522.PCD_StopCrypto1();    
+    Serial.println(F("Authenticate success"));  
     result = true;
   }
   return result;
